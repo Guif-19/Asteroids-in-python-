@@ -74,8 +74,18 @@ VELOCIDADE_ESTRELAS_RAPIDA = 3
 VOLUME_MUSICA_PADRAO = 0.5
 VOLUME_SFX_PADRAO = 0.7
 
+# Assets de som
+SOM_TIRO = "assets/sounds/laser1.mp3"
+SOM_EXPLOSAO_ASTEROIDE = "assets/sounds/explosao_asteroide.mp3"
+SOM_EXPLOSAO_NAVE = "assets/sounds/explode.mp3"
+MUSICA_FUNDO_JOGO = "assets/sounds/musica_fase_1.mp3"
+MUSICA_FUNDO_MENU = "assets/sounds/musica_menu.mp3"
+SOM_OVNI_MOVENDO = "assets/sounds/ovnimove.wav"
+SOM_OVNI_TIRO = "assets/sounds/ovnishot.wav"
+SOM_OVNI_INVISIVEL = "assets/sounds/invisibleufo.mp3"
+
 # Power-up Tiro Triplo
-DURACAO_TIRO_TRIPLO_SEGUNDOS = 10
+DURACAO_TIRO_TRIPLO_SEGUNDOS = 15
 ANGULO_TIRO_TRIPLO_GRAUS = 20
 
 # Arquivos

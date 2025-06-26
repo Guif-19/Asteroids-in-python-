@@ -16,6 +16,65 @@ class GerenciadorSom:
         print("DEBUG: GerenciadorSom __init__ chamado.")
         print("Gerenciador de Som (placeholder) inicializado.")
 
+        try:
+            self.som_tiro = pygame.mixer.Sound(SOM_TIRO)
+            self.som_explosao_asteroide = pygame.mixer.Sound(SOM_EXPLOSAO_ASTEROIDE)
+            self.som_explosao_nave = pygame.mixer.Sound(SOM_EXPLOSAO_NAVE)
+            # Adicione outros sons aqui...
+
+            self.atualizar_volumes_sfx() # Aplica o volume inicial
+            print("Efeitos sonoros carregados com sucesso.")
+        except pygame.error as e:
+            print(f"AVISO: Não foi possível carregar um ou mais arquivos de som: {e}")
+            # Cria sons "falsos" para que o jogo não quebre se um arquivo estiver faltando
+            self.som_tiro = type('DummySound', (), {'play': lambda: None, 'set_volume': lambda v: None})()
+            self.som_explosao_asteroide = self.som_tiro
+            self.som_explosao_nave = self.som_tiro
+
+
+    def tocar_musica_fundo(self, tipo_musica: str = 'menu'):
+        """Carrega e toca uma música de fundo em loop."""
+        print(f"DEBUG: Tocando música para '{tipo_musica}'")
+        pygame.mixer.music.stop()
+        try:
+            arquivo_musica = MUSICA_FUNDO_MENU if tipo_musica == 'menu' else MUSICA_FUNDO_JOGO
+            pygame.mixer.music.load(arquivo_musica)
+            pygame.mixer.music.set_volume(self.volume_musica)
+            pygame.mixer.music.play(-1) # O argumento -1 faz a música tocar em loop infinito
+        except pygame.error as e:
+            print(f"AVISO: Não foi possível tocar a música '{tipo_musica}': {e}")
+
+    def parar_musica(self):
+        pygame.mixer.music.stop()
+
+    def tocar_som(self, nome_som: str):
+        """Toca um efeito sonoro pré-carregado."""
+        if nome_som == 'tiro':
+            self.som_tiro.play()
+        elif nome_som == 'explosao_asteroide':
+            self.som_explosao_asteroide.play()
+        elif nome_som == 'explosao_nave':
+            self.som_explosao_nave.play()
+        # Adicione outros 'elif' para novos sons aqui...
+
+    def set_volume_musica(self, volume, *args):
+        self.volume_musica = max(0.0, min(1.0, float(volume)))
+        pygame.mixer.music.set_volume(self.volume_musica)
+        print(f"Volume da música definido para: {self.volume_musica:.2f}")
+
+    def set_volume_sfx(self, volume, *args):
+        self.volume_sfx = max(0.0, min(1.0, float(volume)))
+        self.atualizar_volumes_sfx()
+        print(f"Volume dos SFX definido para: {self.volume_sfx:.2f}")
+
+    def atualizar_volumes_sfx(self):
+        """Aplica o volume atual a todos os efeitos sonoros carregados."""
+        self.som_tiro.set_volume(self.volume_sfx)
+        self.som_explosao_asteroide.set_volume(self.volume_sfx)
+        self.som_explosao_nave.set_volume(self.volume_sfx)
+        # Adicione .set_volume() para outros sons aqui...
+
+
     def set_volume_musica(self, volume, *args):
         self.volume_musica = max(0.0, min(1.0, volume))
         print(f"Volume da música definido para: {self.volume_musica:.2f}")
@@ -23,6 +82,8 @@ class GerenciadorSom:
     def set_volume_sfx(self, volume, *args):
         self.volume_sfx = max(0.0, min(1.0, volume))
         print(f"Volume dos SFX definido para: {self.volume_sfx:.2f}")
+
+    
 
 
 def coletar_nome_jogador_e_salvar_score(tela_coleta, pontuacao_final_coleta, menu_que_chamou, clock):
@@ -83,6 +144,9 @@ def coletar_nome_jogador_e_salvar_score(tela_coleta, pontuacao_final_coleta, men
 def iniciar_jogo_callback(tela_jogo, clock_jogo, gerenciador_som_jogo, menu_que_chamou, carregar_save=False):
     print(f"Iniciando jogo... Carregar Save: {carregar_save}")
     menu_que_chamou.disable()
+    gerenciador_som_jogo.tocar_musica_fundo('jogo')
+
+
     jogo = GerenciadorJogo(tela_jogo, clock_jogo, gerenciador_som_jogo)
     if carregar_save:
         if not jogo.carregar_estado_jogo():
@@ -116,7 +180,7 @@ def iniciar_jogo_callback(tela_jogo, clock_jogo, gerenciador_som_jogo, menu_que_
         atualizar_botao_continuar(menu_que_chamou)
 
 
-def mostrar_ranking_callback(menu_que_chamou, tela_ranking):
+def mostrar_ranking_callback(menu_que_chamou, tela_ranking, gerenciador_som_jogo):
     print("DEBUG: Exibindo ranking.")
     menu_ranking = pygame_menu.Menu(
         title="Ranking - Top 10",
@@ -139,6 +203,7 @@ def mostrar_ranking_callback(menu_que_chamou, tela_ranking):
     menu_que_chamou.disable()
     menu_ranking.mainloop(tela_ranking)
 
+    gerenciador_som_jogo.tocar_musica_fundo('menu')
     if not menu_que_chamou.is_enabled():
         menu_que_chamou.enable()
     atualizar_botao_continuar(menu_que_chamou)
@@ -204,12 +269,14 @@ def atualizar_botao_continuar(menu_alvo):
 def main():
     print("DEBUG: Função main() iniciada.")
     pygame.init()
+    pygame.mixer.init()
     tela = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
     pygame.display.set_caption(TITULO_JOGO)
     clock = pygame.time.Clock()
     print("DEBUG: Tela criada.")
 
     gerenciador_som = GerenciadorSom()
+    gerenciador_som.tocar_musica_fundo('menu')
     print("DEBUG: GerenciadorSom instanciado.")
 
     tema_menu = pygame_menu.themes.THEME_DARK.copy()

@@ -216,6 +216,7 @@ class GerenciadorJogo:
                 if asteroide.ativo and projetil.colide_com(asteroide):
                     projetil.ativo = False
                     self.pontuacao += asteroide.pontos
+                    self.gerenciador_som.tocar_som('explosao_asteroide')
                     novos_asteroides.extend(asteroide.dividir())
                     break # Projétil só atinge uma coisa
 
@@ -324,6 +325,10 @@ class GerenciadorJogo:
     def _nave_destruida(self):
         if not self.nave or not self.nave.ativo:
             return
+        
+        self.gerenciador_som.tocar_som('explosao_nave') # <<< TOCA O SOM
+        print(f"DEBUG: Nave destruída. Vidas antes: {self.vidas}")
+
 
         print(f"DEBUG: Nave destruída. Vidas antes: {self.vidas}")
         self.nave.ativo = False
@@ -538,8 +543,12 @@ class GerenciadorJogo:
                     
                     # Tiro com a barra de espaço
                     elif evento.key == pygame.K_SPACE and self.nave and self.nave.ativo and not self.jogo_pausado and not self.game_over:
-                         novos_projeteis = self.nave.atirar()
-                         self.projeteis.extend(novos_projeteis)
+                        novos_projeteis = self.nave.atirar()
+                        self.projeteis.extend(novos_projeteis)
+                        if novos_projeteis: # Verifica se um tiro foi realmente criado
+                            self.gerenciador_som.tocar_som('tiro') # <<< TOCA O SOM
+                            self.projeteis.extend(novos_projeteis)
+
 
             # 2. LÓGICA DO JOGO (só executa se não estiver pausado)
             if not self.jogo_pausado:
