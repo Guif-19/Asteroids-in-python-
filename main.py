@@ -6,7 +6,7 @@ import os
 # Importações locais
 from config import *
 from gerenciador import GerenciadorJogo, EstadoJogoLoop
-from entidade import CLASSE_MAP
+from entidades import CLASSE_MAP
 from ranking_manager import RankingManager
 from jogador_ranking import JogadorRanking
 from vetor import *
@@ -165,22 +165,30 @@ def criar_menu_ranking() -> pygame_menu.Menu:
         height=ALTURA_TELA * 0.9,
         theme=pygame_menu.themes.THEME_DARK
     )
-    ranking_manager = RankingManager()
-    ranking_manager.carregar_de_arquivo(ARQUIVO_HIGH_SCORES)
-
-    if not ranking_manager.jogadores:
-        menu_ranking.add.label("Nenhum recorde ainda!", font_size=20)
-    else:
-        # Adiciona um frame para rolagem, se necessário
-        frame_ranking = menu_ranking.add.frame_v(width=LARGURA_TELA * 0.7, height=ALTURA_TELA * 0.7)
-
-        frame_ranking._relax = True
-
-        for i, jogador in enumerate(ranking_manager.jogadores, 1):
-            frame_ranking.pack(menu_ranking.add.label(f"{i}. {jogador.nome}: {jogador.pontuacao} pts"))
+    frame_ranking = menu_ranking.add.frame_v(width=LARGURA_TELA * 0.7, height=ALTURA_TELA * 0.7)
+    frame_ranking._relax = True
 
     menu_ranking.add.button("Voltar", pygame_menu.events.BACK)
+
+    def atualizar_conteudo_do_menu(current_menu=None, next_menu=None):
+        for widget in list(frame_ranking.get_widgets()):
+            menu_ranking.remove_widget(widget)
+        
+        ranking_manager = RankingManager()
+        ranking_manager.carregar_de_arquivo(ARQUIVO_HIGH_SCORES)
+
+        if not ranking_manager.jogadores:
+            frame_ranking.pack(menu_ranking.add.label("Nenhum recorde ainda!", font_size=20))
+        else:
+            for i, jogador in enumerate(ranking_manager.jogadores, 1):
+                frame_ranking.pack(menu_ranking.add.label(f"{i}. {jogador.nome}: {jogador.pontuacao} pts"))
+
+    menu_ranking.set_onbeforeopen(atualizar_conteudo_do_menu)
+
+    atualizar_conteudo_do_menu
+
     return menu_ranking
+
 
 
 

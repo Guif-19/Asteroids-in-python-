@@ -5,7 +5,7 @@ import json
 import random   
 from enum import Enum, auto
 from config import *
-from entidade import *
+from entidades import *
 from vetor import Vetor2D
 
 
