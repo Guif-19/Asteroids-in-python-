@@ -21,9 +21,10 @@ TITULO_JOGO = "Asteroids UFV-CRP"
 VELOCIDADE_ROTACAO_NAVE = 5
 ACELERACAO_NAVE = 0.2
 FRICCAO_NAVE = 0.99
-COOLDOWN_TIRO = 200  # ms
-VIDAS_INICIAIS = 3
+COOLDOWN_TIRO = 300  # ms
+VIDAS_INICIAIS = 5
 TEMPO_INVENCIBILIDADE_SEGUNDOS = 2
+
 
 # Projétil
 VELOCIDADE_PROJETIL = 10
@@ -40,8 +41,8 @@ PONTOS_ASTEROIDE_PEQUENO = 100
 # OVNI
 CHANCE_SPAWN_OVNI = 0.001
 VELOCIDADE_OVNI = 5
-COOLDOWN_TIRO_OVNI_MS = 1000
-TEMPO_OVNI_ANTES_ATIRAR_SEGUNDOS = 2
+COOLDOWN_TIRO_OVNI_MS = 1500
+TEMPO_OVNI_ANTES_ATIRAR_SEGUNDOS = 3
 MAX_OVNIS_TELA = 2
 PONTOS_OVNI = 1000
 VELOCIDADE_PROJETIL_OVNI = 5
@@ -54,6 +55,8 @@ COR_PROJETIL_OVNI_CRUZ = (0, 255, 0)  # Verde
 CHANCE_SPAWN_FANTASMA = 0.001
 MAX_FANTASMAS_TELA = 1
 PONTOS_FANTASMA = 500
+VELOCIDADE_LASER_FANTASMA = 12
+
 
 # Timings em milissegundos (1000ms = 1s)
 DURACAO_FANTASMA_CARREGANDO_MS = 2500
@@ -74,6 +77,7 @@ VELOCIDADE_ESTRELAS_RAPIDA = 3
 VOLUME_MUSICA_PADRAO = 0.5
 VOLUME_SFX_PADRAO = 0.7
 
+
 # Assets de som
 SOM_TIRO = "assets/sounds/laser1.mp3"
 SOM_EXPLOSAO_ASTEROIDE = "assets/sounds/explosao_asteroide.mp3"
@@ -82,7 +86,8 @@ MUSICA_FUNDO_JOGO = "assets/sounds/musica_fase_1.mp3"
 MUSICA_FUNDO_MENU = "assets/sounds/musica_menu.mp3"
 SOM_OVNI_MOVENDO = "assets/sounds/ovnimove.wav"
 SOM_OVNI_TIRO = "assets/sounds/ovnishot.wav"
-SOM_OVNI_INVISIVEL = "assets/sounds/invisibleufo.mp3"
+SOM_FANTASMA_INVISIVEL = "assets/sounds/invisibleufo.mp3"
+
 
 # Power-up Tiro Triplo
 DURACAO_TIRO_TRIPLO_SEGUNDOS = 15
@@ -91,3 +96,22 @@ ANGULO_TIRO_TRIPLO_GRAUS = 20
 # Arquivos
 ARQUIVO_HIGH_SCORES = "high_scores.json"
 ARQUIVO_SAVE_GAME = "savegame.json"
+
+
+# Sprite 
+IMAGEM_NAVE = "assets/images/pixel_ship_blue_small.png"
+IMAGEM_NAVE_TRIPLO = "assets/images/pixel_ship_blue_small.png"
+IMAGEM_PROJETIL_JOGADOR = "assets/images/pixel_laser_small_blue.png"
+
+IMAGEM_ASTEROIDE_GRANDE = "assets/images/pixel_asteroid.png"
+IMAGEM_ASTEROIDE_MEDIO = "assets/images/pixel_asteroid.png" # Vamos reutilizar e diminuir a escala
+IMAGEM_ASTEROIDE_PEQUENO = "assets/images/asteroid_tiny.png"
+
+IMAGEM_OVNI_X = "assets/images/pixel_ship_red_small_2.png"
+IMAGEM_OVNI_CRUZ = "assets/images/pixel_ship_green_small_2.png"
+IMAGEM_PROJETIL_OVNI_X = "assets/images/pixel_laser_small_red.png"
+IMAGEM_PROJETIL_OVNI_CRUZ = "assets/images/pixel_laser_small_red.png" # Use a cópia se for diferente
+
+IMAGEM_FANTASMA = "assets/images/pixel_shape3_blue.png"
+IMAGEM_LASER_FANTASMA = "assets/images/horizontal_bar_red.png" # Usando a barra como laser
+
