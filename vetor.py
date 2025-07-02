@@ -1,5 +1,3 @@
-# vetor.py (VERSÃO FINAL COM GETTERS E SETTERS)
-
 import math
 
 class Vetor2D:

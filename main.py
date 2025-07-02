@@ -252,11 +252,9 @@ def main():
     )
 
 
-    # 1. Crie os sub-menus ANTES de adicionar os botões
     menu_ranking = criar_menu_ranking()
     menu_configuracoes = criar_menu_configuracoes(gerenciador_som)
 
-    # 2. Adicione os botões, passando os objetos de menu como ação
     global botao_continuar_ref
     menu_principal.add.button('Novo Jogo', lambda: iniciar_jogo_callback(tela, clock, gerenciador_som, menu_principal, carregar_save=False))
     botao_continuar_ref = menu_principal.add.button('Continuar Jogo', lambda: iniciar_jogo_callback(tela, clock, gerenciador_som, menu_principal, carregar_save=True))
