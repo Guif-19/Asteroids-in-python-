@@ -84,7 +84,6 @@ class GerenciadorSom:
 class App:
     def __init__(self):
         pygame.init()
-        # --- Atributos agora são privados ---
         self.__tela = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
         pygame.display.set_caption(TITULO_JOGO)
         self.__clock = pygame.time.Clock()
@@ -119,8 +118,7 @@ class App:
         frame._relax = True
 
         def atualizar(menu_atual, proximo_menu):
-            # CORREÇÃO: A remoção é feita a partir do menu_ranking, não do frame.
-            # Este loop limpa os widgets antigos do ranking antes de adicionar os novos.
+            # Loop para limpar os widgets antigos do ranking antes de adicionar os novos.
             while frame.get_widgets():
                 menu_ranking.remove_widget(frame.get_widgets()[0])
 
@@ -162,11 +160,9 @@ class App:
         # O loop principal do jogo é executado aqui
         retorno_do_jogo, pontuacao_final = jogo.loop_principal()
 
-        # --- INÍCIO DA CORREÇÃO ---
         # Adiciona a lógica para salvar o jogo quando o jogador escolhe "Salvar e Sair"
         if retorno_do_jogo == EstadoJogoLoop.VOLTAR_AO_MENU_COM_SAVE:
             jogo.salvar_estado_jogo()
-        # --- FIM DA CORREÇÃO ---
 
         self.__gerenciador_som.tocar_musica_fundo('menu')
         
@@ -200,13 +196,13 @@ class App:
         
         input_field = menu_input.add.text_input("Nome: ", default="JOGADOR", maxchar=10, onchange=lambda v: nome_var.__setitem__(0, v))
         
-        # PASSO 1: Adiciona um Label para exibir mensagens de erro
+        # Adiciona um Label para exibir mensagens de erro
         error_label = menu_input.add.label("", font_color=(255, 100, 100), font_size=18)
 
         def salvar_e_fechar():
             nome = nome_var[0].strip().upper()
             
-            # PASSO 2: Atualiza o Label em vez de chamar um método que não existe
+            # Atualiza o Label em vez de chamar um método que não existe
             if not 3 <= len(nome) <= 10:
                 error_label.set_title("Nome deve ter 3-10 caracteres.")
                 return

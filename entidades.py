@@ -1,5 +1,3 @@
-# entidades.py (VERSÃO FINAL, CORRIGIDA E COMPLETA)
-
 from typing import Optional
 import pygame
 import math
@@ -39,7 +37,6 @@ class GameObject:
         # Calcula a nova posição em uma nova variável
         nova_posicao = posicao_atual + velocidade_atual * delta_tempo * FPS
         
-        # --- LINHA DA CORREÇÃO ---
         # Atribui a nova posição de volta ao objeto usando o setter
         self.set_posicao(nova_posicao)
         
@@ -350,7 +347,6 @@ class OVNI(GameObject):
 
     @classmethod
     def from_dict(cls, data: dict) -> 'OVNI':
-        # --- CORREÇÃO APLICADA AQUI ---
         # Acessa a classe correta (OvniX ou OvniCruz) a partir do CLASSE_MAP
         # e a instancia com os argumentos corretos.
         classe_correta = CLASSE_MAP[data["classe_tipo"]]

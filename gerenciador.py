@@ -1,5 +1,3 @@
-# gerenciador.py (VERSÃO FINAL, CORRIGIDA E COMPLETA)
-
 import pygame
 import pygame_menu
 import os
@@ -117,12 +115,12 @@ class GerenciadorJogo:
     def _atualizar_objetos(self, delta_tempo: float):
         self.__fundo_estrelado.atualizar(delta_tempo)
         
-        # 1. Atualiza todas as entidades, EXCETO a NaveFantasma
+        # Atualiza todas as entidades, EXCETO a NaveFantasma
         entidades_gerais = [self.__nave] + self.__asteroides + self.__projeteis + self.__ovnis + self.__ovni_projeteis + self.__lasers_fantasma
         for entidade in filter(None, entidades_gerais):
             entidade.atualizar(delta_tempo)
 
-        # 2. Atualiza a NaveFantasma de forma separada, passando o alvo
+        # Atualiza a NaveFantasma de forma separada, passando o alvo
         alvo_jogador = self.__nave.get_posicao() if self.__nave and self.__nave.is_ativo() else None
         
         for fantasma in self.__fantasmas:
