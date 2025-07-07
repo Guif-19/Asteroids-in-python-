@@ -1,5 +1,9 @@
 [
     {
+        "nome": "JOOJ",
+        "pontuacao": 120000
+    },
+    {
         "nome": "TUTA",
         "pontuacao": 26210
     },
@@ -20,6 +24,10 @@
         "pontuacao": 2980
     },
     {
+        "nome": "ALAN",
+        "pontuacao": 2530
+    },
+    {
         "nome": "NOVO TEEST",
         "pontuacao": 2330
     },
@@ -30,13 +38,5 @@
     {
         "nome": "1910",
         "pontuacao": 1910
-    },
-    {
-        "nome": "TESSSSSTE",
-        "pontuacao": 1730
-    },
-    {
-        "nome": "1590",
-        "pontuacao": 1590
     }
 ]

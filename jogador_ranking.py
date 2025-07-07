@@ -1,10 +1,13 @@
 class JogadorRanking:
     def __init__(self, nome: str, pontuacao: int):
-        self.nome = nome
-        self.pontuacao = pontuacao
+        self.__nome = nome
+        self.__pontuacao = pontuacao
 
-    def to_dict(self):
-        return {"nome": self.nome, "pontuacao": self.pontuacao}
+    def get_nome(self) -> str: return self.__nome
+    def get_pontuacao(self) -> int: return self.__pontuacao
+
+    def to_dict(self) -> dict:
+        return {"nome": self.__nome, "pontuacao": self.__pontuacao}
 
     @staticmethod
     def from_dict(data):

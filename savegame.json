@@ -1,0 +1,215 @@
+{
+    "pontuacao": 3760,
+    "vidas": 2,
+    "nivel_atual": 0,
+    "game_over": false,
+    "nave": {
+        "classe_tipo": "Nave",
+        "posicao": {
+            "x": 400.0,
+            "y": 300.0
+        },
+        "velocidade": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "raio": 15,
+        "ativo": true,
+        "angulo_graus": 129,
+        "tem_tiro_triplo": false,
+        "tempo_fim_tiro_triplo_restante_ms": 0,
+        "invulneravel_fim_restante_ms": 0
+    },
+    "asteroides": [
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 595.6040264346136,
+                "y": 556.54346258224
+            },
+            "velocidade": {
+                "x": -1.0292806961824166,
+                "y": -1.2490211130126117
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 108.46101718777017,
+            "velocidade_rotacao": 0.17547552544174105
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 248.74859388612742,
+                "y": 575.4319178708686
+            },
+            "velocidade": {
+                "x": -1.2765193684024052,
+                "y": 0.9949727606213885
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 51.4022799796128,
+            "velocidade_rotacao": -0.3316947159252228
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 710.1087275904513,
+                "y": 455.71576277547007
+            },
+            "velocidade": {
+                "x": 0.3544522558169148,
+                "y": 1.1095318348693004
+            },
+            "raio": 25,
+            "ativo": true,
+            "tamanho_str": "medio",
+            "pontos": 50,
+            "angulo_rotacao": 71.5298116935079,
+            "velocidade_rotacao": -0.49331479836871606
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 681.9705514015174,
+                "y": 562.270367563829
+            },
+            "velocidade": {
+                "x": 1.1621306364886759,
+                "y": -0.07841988253345678
+            },
+            "raio": 25,
+            "ativo": true,
+            "tamanho_str": "medio",
+            "pontos": 50,
+            "angulo_rotacao": 353.77114485981303,
+            "velocidade_rotacao": 0.2680446548792552
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 569.7986050373698,
+                "y": 478.906386355006
+            },
+            "velocidade": {
+                "x": 1.348816722393858,
+                "y": 0.5092322815934628
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 111.89107204715272,
+            "velocidade_rotacao": -0.07568115838795153
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 331.30801704378337,
+                "y": -10.465262078057545
+            },
+            "velocidade": {
+                "x": 1.0337489221432807,
+                "y": -1.0049812103685316
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 36.11222705560898,
+            "velocidade_rotacao": 0.10189700113744382
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 720.2924886624168,
+                "y": 145.57095743971982
+            },
+            "velocidade": {
+                "x": -1.5938045070834839,
+                "y": 1.5339851775673634
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 100.01760678293108,
+            "velocidade_rotacao": 0.39221993886880036
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": -1.0401008451689522,
+                "y": 583.3689142633166
+            },
+            "velocidade": {
+                "x": 1.0872915828205405,
+                "y": -0.9467951632501076
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 101.4542085971855,
+            "velocidade_rotacao": 0.681638850944241
+        },
+        {
+            "classe_tipo": "Asteroide",
+            "posicao": {
+                "x": 744.902553129078,
+                "y": 569.9606233950431
+            },
+            "velocidade": {
+                "x": -0.3820902778298487,
+                "y": -1.3901910252962013
+            },
+            "raio": 12,
+            "ativo": true,
+            "tamanho_str": "pequeno",
+            "pontos": 100,
+            "angulo_rotacao": 123.3730616633708,
+            "velocidade_rotacao": -0.9894474658893326
+        }
+    ],
+    "projeteis": [
+        {
+            "classe_tipo": "Projetil",
+            "posicao": {
+                "x": 670.4467945870263,
+                "y": 519.0034960853428
+            },
+            "velocidade": {
+                "x": 7.771459614569709,
+                "y": 6.293203910498374
+            },
+            "raio": 3,
+            "ativo": true,
+            "frames_vividos": 33
+        }
+    ],
+    "ovnis": [],
+    "ovni_projeteis": [],
+    "fantasmas": [
+        {
+            "classe_tipo": "NaveFantasma",
+            "posicao": {
+                "x": -100.0,
+                "y": -100.0
+            },
+            "velocidade": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "raio": 18,
+            "ativo": false,
+            "estado": "INVISIVEL",
+            "tempo_proxima_acao_restante_ms": 4948,
+            "alvo_disparo": null
+        }
+    ],
+    "lasers_fantasma": []
+}
