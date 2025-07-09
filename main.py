@@ -2,6 +2,7 @@ import pygame
 import pygame_menu
 import json
 import os
+from typing import Optional
 
 # Importações locais
 from config import *
@@ -92,13 +93,41 @@ class App:
         self.__botao_continuar_ref = None
         self.__menu_principal = self._criar_menu_principal()
 
+    def get_tela(self) -> pygame.Surface:
+        return self.__tela
+
+    def get_clock(self) -> pygame.time.Clock:
+        return self.__clock
+
+    def get_gerenciador_som(self) -> 'GerenciadorSom':
+        return self.__gerenciador_som
+
+    def get_ranking_manager(self) -> 'RankingManager':
+        return self.__ranking_manager
+
+    def get_menu_principal(self) -> 'pygame_menu.Menu':
+        return self.__menu_principal
+
+    def get_botao_continuar_ref(self) -> Optional[pygame_menu.widgets.Button]:
+        return self.__botao_continuar_ref
+
+    def set_botao_continuar_ref(self, botao: pygame_menu.widgets.Button):
+        self.__botao_continuar_ref = botao
+
+
     def _criar_menu_principal(self) -> pygame_menu.Menu:
         tema = pygame_menu.themes.THEME_DARK.copy()
-        tema.widget_font_size = 24; tema.title_font_size = 36; tema.background_color = (40, 40, 60)
+        tema.widget_font_size = 24
+        tema.title_font_size = 36
+        tema.background_color = (40, 40, 60)
         menu = pygame_menu.Menu(title="Asteroids UFV-CRP", width=LARGURA_TELA, height=ALTURA_TELA, theme=tema)
+        
         menu.add.button('Novo Jogo', lambda: self._iniciar_jogo_callback(carregar_save=False))
         
-        self.__botao_continuar_ref = menu.add.button('Continuar Jogo', lambda: self._iniciar_jogo_callback(carregar_save=True))
+        # Usa o setter para definir a referência do botão
+        self.set_botao_continuar_ref(
+            menu.add.button('Continuar Jogo', lambda: self._iniciar_jogo_callback(carregar_save=True))
+        )
         
         menu.add.button('Ranking', self._criar_menu_ranking())
         menu.add.button('Configurações', self._criar_menu_configuracoes())
@@ -108,47 +137,47 @@ class App:
         return menu
 
     def _criar_menu_ranking(self) -> pygame_menu.Menu:
-        menu_ranking = pygame_menu.Menu(
-            title="Ranking - Top 10",
-            width=LARGURA_TELA * 0.8,
-            height=ALTURA_TELA * 0.9,
-            theme=pygame_menu.themes.THEME_DARK
-        )
+        menu_ranking = pygame_menu.Menu(title="Ranking - Top 10", width=LARGURA_TELA * 0.8, height=ALTURA_TELA * 0.9, theme=pygame_menu.themes.THEME_DARK)
         frame = menu_ranking.add.frame_v(width=LARGURA_TELA * 0.7, height=ALTURA_TELA * 0.7)
         frame._relax = True
+        
+        def atualizar_ranking(menu_atual, proximo_menu):
+            ranking_manager = self.get_ranking_manager() # Usa getter
+            ranking_manager.carregar_scores()
+            jogadores = ranking_manager.get_jogadores()
 
-        def atualizar(menu_atual, proximo_menu):
-            # Loop para limpar os widgets antigos do ranking antes de adicionar os novos.
-            while frame.get_widgets():
-                menu_ranking.remove_widget(frame.get_widgets()[0])
+            if menu_ranking.get_widget('ranking_table'):
+                menu_ranking.remove_widget('ranking_table')
 
-            self.__ranking_manager.carregar_de_arquivo(ARQUIVO_HIGH_SCORES)
-            jogadores = self.__ranking_manager.get_jogadores()
-            
+            tabela = menu_ranking.add.table(table_id='ranking_table')
+            tabela.add_row(['Pos.', 'Nome', 'Pontuacao'], cell_align=pygame_menu.locals.ALIGN_CENTER, cell_padding=5, cell_font=pygame_menu.font.FONT_FRANCHISE)
             if not jogadores:
-                frame.pack(menu_ranking.add.label("Nenhum recorde ainda!", font_size=20))
+                tabela.add_row(['-', 'Nenhum recorde salvo', '-'], cell_align=pygame_menu.locals.ALIGN_CENTER)
             else:
                 for i, jogador in enumerate(jogadores, 1):
-                    frame.pack(menu_ranking.add.label(f"{i}. {jogador.get_nome()}: {jogador.get_pontuacao()} pts"))
+                    tabela.add_row([str(i), jogador.get_nome(), str(jogador.get_pontuacao())], cell_align=pygame_menu.locals.ALIGN_CENTER)
+            frame.pack(tabela)
 
-        menu_ranking.set_onbeforeopen(atualizar)
+        menu_ranking.set_onbeforeopen(atualizar_ranking)
         menu_ranking.add.button("Voltar", pygame_menu.events.BACK, margin=(0, 20))
         return menu_ranking
 
     def _criar_menu_configuracoes(self) -> pygame_menu.Menu:
+        gerenciador_som = self.get_gerenciador_som() # Usa getter
         menu_cfg = pygame_menu.Menu(title="Configurações", width=LARGURA_TELA*0.7, height=ALTURA_TELA*0.6, theme=pygame_menu.themes.THEME_DARK)
         menu_cfg.add.label("Volume da Música:")
-        menu_cfg.add.range_slider("", default=int(self.__gerenciador_som.get_volume_musica()*100), range_values=(0, 100), increment=1, onchange=self.__gerenciador_som.set_volume_musica)
+        menu_cfg.add.range_slider("", default=int(gerenciador_som.get_volume_musica()*100), range_values=(0, 100), increment=1, onchange=gerenciador_som.set_volume_musica)
         menu_cfg.add.label("Volume dos Efeitos Sonoros (SFX):")
-        menu_cfg.add.range_slider("", default=int(self.__gerenciador_som.get_volume_sfx()*100), range_values=(0, 100), increment=1, onchange=self.__gerenciador_som.set_volume_sfx)
+        menu_cfg.add.range_slider("", default=int(gerenciador_som.get_volume_sfx()*100), range_values=(0, 100), increment=1, onchange=gerenciador_som.set_volume_sfx)
         menu_cfg.add.button("Voltar", pygame_menu.events.BACK)
         return menu_cfg
 
     def _iniciar_jogo_callback(self, carregar_save=False):
-        self.__menu_principal.disable()
-        self.__gerenciador_som.tocar_musica_fundo('jogo')
+        self.get_menu_principal().disable() # Usa getter
+        gerenciador_som = self.get_gerenciador_som()
+        gerenciador_som.tocar_musica_fundo('jogo')
         
-        jogo = GerenciadorJogo(self.__tela, self.__clock, self.__gerenciador_som)
+        jogo = GerenciadorJogo(self.get_tela(), self.get_clock(), gerenciador_som)
 
         if carregar_save:
             if not jogo.carregar_estado_jogo():
@@ -157,93 +186,67 @@ class App:
         else:
             jogo.reiniciar_jogo_completo()
 
-        # O loop principal do jogo é executado aqui
         retorno_do_jogo, pontuacao_final = jogo.loop_principal()
 
-        # Adiciona a lógica para salvar o jogo quando o jogador escolhe "Salvar e Sair"
-        if retorno_do_jogo == EstadoJogoLoop.VOLTAR_AO_MENU_COM_SAVE:
-            jogo.salvar_estado_jogo()
-
-        self.__gerenciador_som.tocar_musica_fundo('menu')
-        
-        # Lógica de Game Over (remove o save e pede o nome do jogador)
         if retorno_do_jogo == EstadoJogoLoop.VOLTAR_AO_MENU_GAME_OVER:
-            if os.path.exists(ARQUIVO_SAVE_GAME):
-                try: 
-                    os.remove(ARQUIVO_SAVE_GAME)
-                except OSError: 
-                    pass
             self._coletar_nome_jogador_e_salvar_score(pontuacao_final)
         
-        self.__menu_principal.enable()
+        gerenciador_som.tocar_musica_fundo('menu')
+        self.get_menu_principal().enable() # Usa getter
         self._atualizar_botao_continuar()
 
-
     def _coletar_nome_jogador_e_salvar_score(self, pontuacao_final: int):
-        """
-        Cria e exibe um menu temporário para o jogador digitar o nome e salvar a pontuação.
-        """
-        nome_var = ["JOGADOR"]
-        tema_input = pygame_menu.themes.THEME_DARK.copy()
-        tema_input.widget_font_size = 20
-        tema_input.title_font_size = 24
+        if pontuacao_final <= 0: return
+        menu_nome = pygame_menu.Menu(title="FIM DE JOGO", width=500, height=300, theme=pygame_menu.themes.THEME_DARK)
+        menu_nome.add.label(f"Pontuacao Final: {pontuacao_final}", font_size=30)
+        menu_nome.add.vertical_margin(20)
+        text_input = menu_nome.add.text_input('Seu Nome: ', default='JOGADOR', maxchar=10)
 
-        menu_input = pygame_menu.Menu(
-            title=f"FIM DE JOGO! Pontos: {pontuacao_final}",
-            width=int(LARGURA_TELA * 0.7), height=int(ALTURA_TELA * 0.5), theme=tema_input,
-            onclose=pygame_menu.events.NONE
-        )
-        
-        input_field = menu_input.add.text_input("Nome: ", default="JOGADOR", maxchar=10, onchange=lambda v: nome_var.__setitem__(0, v))
-        
-        # Adiciona um Label para exibir mensagens de erro
-        error_label = menu_input.add.label("", font_color=(255, 100, 100), font_size=18)
-
-        def salvar_e_fechar():
-            nome = nome_var[0].strip().upper()
+        def acao_salvar():
+            nome_digitado = text_input.get_value().strip().upper()
+            if not nome_digitado: print("Nome não pode ser vazio!"); return
             
-            # Atualiza o Label em vez de chamar um método que não existe
-            if not 3 <= len(nome) <= 10:
-                error_label.set_title("Nome deve ter 3-10 caracteres.")
-                return
+            print(f"Criando novo recorde para {nome_digitado} com {pontuacao_final} pontos.")
+            novo_recorde = JogadorRanking(nome_digitado, pontuacao_final)
+            
+            ranking_manager = self.get_ranking_manager() # Usa getter
+            ranking_manager.carregar_scores()
+            ranking_manager.adicionar_score(novo_recorde)
+            ranking_manager.salvar_scores()
+            menu_nome.disable()
+            self._atualizar_botao_continuar()
 
-            # Se a validação passar, limpa a mensagem de erro e salva
-            error_label.set_title("")
-            self.__ranking_manager.carregar_de_arquivo(ARQUIVO_HIGH_SCORES)
-            self.__ranking_manager.adicionar_jogador(JogadorRanking(nome, pontuacao_final))
-            self.__ranking_manager.salvar_em_arquivo(ARQUIVO_HIGH_SCORES)
-            menu_input.disable()
-
-        menu_input.add.button("Salvar e Voltar", salvar_e_fechar)
-        menu_input.add.button("Voltar Sem Salvar", menu_input.disable)
-
-        self.__menu_principal.disable()
-        menu_input.mainloop(self.__tela)
-        self.__menu_principal.enable()
+        menu_nome.add.button('Salvar Pontuacao', acao_salvar, margin=(20,0))
+        menu_nome.add.button('Voltar ao Menu', menu_nome.disable)
+        menu_nome.mainloop(self.get_tela()) # Usa getter
 
     def _verificar_save_valido(self) -> bool:
         if not os.path.exists(ARQUIVO_SAVE_GAME): return False
         try:
-            with open(ARQUIVO_SAVE_GAME, 'r') as f: return not json.load(f).get("game_over", False)
+            with open(ARQUIVO_SAVE_GAME, 'r') as f:
+                return not json.load(f).get("game_over", True)
         except (json.JSONDecodeError, IOError): return False
 
     def _atualizar_botao_continuar(self):
-        if not self.__botao_continuar_ref: return
+        botao = self.get_botao_continuar_ref() # Usa getter
+        if not botao: return
+        
         eh_valido = self._verificar_save_valido()
-        self.__botao_continuar_ref.set_title("Continuar Jogo" if eh_valido else "Continuar Jogo (Vazio)")
-        self.__botao_continuar_ref.update_font({'color': BRANCO if eh_valido else (100, 100, 100)})
-        self.__botao_continuar_ref.set_attribute("readonly", not eh_valido)
+        botao.set_title("Continuar Jogo" if eh_valido else "Continuar (Vazio)")
+        botao.update_font({'color': BRANCO if eh_valido else (100, 100, 100)})
+        botao.readonly = not eh_valido # Atributo readonly pode ser acessado diretamente
 
     def run(self):
-        self.__gerenciador_som.tocar_musica_fundo('menu')
+        self.get_gerenciador_som().tocar_musica_fundo('menu') # Usa getter
         self._atualizar_botao_continuar()
         try:
-            self.__menu_principal.mainloop(self.__tela)
+            self.get_menu_principal().mainloop(self.get_tela()) # Usa getters
         except Exception as e:
             import traceback
             print(f"Ocorreu um erro fatal no loop principal: {e}"); traceback.print_exc()
         finally:
-            pygame.quit(); print("Jogo encerrado.")
+            pygame.quit()
+            print("Jogo encerrado.")
 
 if __name__ == '__main__':
     app = App()

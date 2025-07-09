@@ -83,7 +83,6 @@ class Nave(GameObject):
         except pygame.error:
             self.original_image = pygame.Surface((self.get_raio() * 2, self.get_raio() * 2), pygame.SRCALPHA)
 
-        # --- CORREÇÃO APLICADA AQUI ---
         self.image = self.original_image
         self.rect = self.image.get_rect(center=self.get_posicao().para_tupla())
         self.mask = pygame.mask.from_surface(self.image)
@@ -160,7 +159,6 @@ class Nave(GameObject):
         return obj
 
 class Projetil(GameObject):
-# Em entidades.py, substitua o __init__ da classe Projetil:
     def __init__(self, posicao: Vetor2D, velocidade: Vetor2D):
         super().__init__(posicao, velocidade, 3)
         self.__frames_vividos = 0
@@ -171,7 +169,6 @@ class Projetil(GameObject):
             pygame.draw.rect(self.original_image, BRANCO, (0, 0, 5, 10))
         angulo = math.degrees(math.atan2(-velocidade.get_y(), velocidade.get_x())) + 90
         
-        # --- CORREÇÃO APLICADA AQUI ---
         self.image = pygame.transform.rotate(self.original_image, -angulo)
         self.rect = self.image.get_rect(center=posicao.para_tupla())
         self.mask = pygame.mask.from_surface(self.image)
@@ -214,7 +211,6 @@ class Asteroide(GameObject):
             self.original_image = pygame.Surface((raio * 2, raio * 2), pygame.SRCALPHA)
             pygame.draw.circle(self.original_image, CINZA_CLARO, (raio, raio), raio, 1)
         
-        # --- CORREÇÃO APLICADA AQUI ---
         self.image = self.original_image
         self.rect = self.image.get_rect(center=posicao.para_tupla())
         self.mask = pygame.mask.from_surface(self.image)
@@ -519,8 +515,6 @@ class LaserFantasma(GameObject):
         
         angulo = math.degrees(math.atan2(-direcao.get_y(), direcao.get_x())) + 90
         
-        # --- CORREÇÃO APLICADA AQUI ---
-        # A atribuição foi separada em 3 linhas para evitar o erro de 'None'
         self.image = pygame.transform.rotozoom(self.original_image, -angulo, 1.0)
         self.rect = self.image.get_rect(center=pos_inicio.para_tupla())
         self.mask = pygame.mask.from_surface(self.image)
